@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.android.async.http)
     implementation(libs.glide)
     implementation(libs.androidx.viewpager2)
-<<<<<<< HEAD
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
@@ -67,8 +66,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
 
 
-=======
->>>>>>> parent of 1ab16a7 (FavUser Update)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
