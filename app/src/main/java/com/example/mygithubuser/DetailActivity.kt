@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.mygithubuser.databinding.ActivityDetailBinding
@@ -17,6 +19,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
+import com.loopj.android.http.BuildConfig
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 
@@ -31,7 +34,14 @@ class DetailActivity : AppCompatActivity() {
         )
     }
 
+
     private lateinit var binding: ActivityDetailBinding
+    private val viewModel by viewModels<FavUserModel>()
+
+    private var name: String? = null
+    private var favUserId: String? = null
+    private var avatarUrl: String? = null
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +53,25 @@ class DetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val keyLogin = intent.getStringExtra(EXTRA_LOGIN)
         keyLogin?.let {
+            favUserId = it
             getDetail(it)
             tabSetup(it)
         }
+
+        setupFavoriteButton()
     }
-    private fun getDetail(keyLogin: String){
+
+    private fun getDetail(keyLogin: String) {
         binding.progressBar.visibility = View.VISIBLE
         val client = AsyncHttpClient()
 
+<<<<<<< HEAD
+=======
         client.addHeader("Authorization", "token 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")
+>>>>>>> parent of 1ab16a7 (FavUser Update)
         client.addHeader("User-Agent", "request")
 
         val url = "https://api.github.com/users/$keyLogin"
@@ -66,10 +84,10 @@ class DetailActivity : AppCompatActivity() {
                 try {
                     val responseObject = JSONObject(result)
                     val login = responseObject.getString("login")
-                    val name = responseObject.getString("name")
+                    name = responseObject.getString("name")
                     val followers = responseObject.getInt("followers")
                     val following = responseObject.getInt("following")
-                    val avatar_url = responseObject.getString("avatar_url")
+                    avatarUrl = responseObject.getString("avatar_url")
 
                     binding.tvLoginDetail.text = login
                     binding.tvNameDetail.text = name
@@ -77,9 +95,10 @@ class DetailActivity : AppCompatActivity() {
                     binding.tvNumberFollowing.text = following.toString()
 
                     Glide.with(this@DetailActivity)
-                        .load(avatar_url) // URL Gambar
+                        .load(avatarUrl) // URL Gambar
                         .into(binding.ivAvatarDetail) // imageView mana yang akan diterapkan
 
+                    checkFavoriteStatus(login)
                 } catch (e: Exception) {
                     Toast.makeText(this@DetailActivity, e.message, Toast.LENGTH_SHORT).show()
                     e.printStackTrace()
@@ -87,6 +106,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+                binding.progressBar.visibility = View.INVISIBLE
                 val errorMessage = when (statusCode) {
                     401 -> "$statusCode : Bad Request"
                     403 -> "$statusCode : Forbidden"
@@ -97,8 +117,39 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
-    private fun tabSetup(login: String){
 
+    private fun checkFavoriteStatus(userId: String) {
+        viewModel.isFavoriteUser(userId).observe(this, Observer { isFavorite ->
+            this.isFavorite = isFavorite
+            updateFavoriteButton(isFavorite)
+        })
+    }
+
+    private fun updateFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.ibFavoriteButton.setImageResource(R.drawable.favorite)
+        } else {
+            binding.ibFavoriteButton.setImageResource(R.drawable.not_favorite)
+        }
+    }
+
+    private fun setupFavoriteButton() {
+        binding.ibFavoriteButton.setOnClickListener {
+            favUserId?.let { id ->
+                if (isFavorite) {
+                    viewModel.deleteFavoriteUser(id)
+                    Toast.makeText(this, "Deleted from Favorite :(", Toast.LENGTH_SHORT).show()
+                } else {
+                    viewModel.addFavoriteUser(id, name ?: "", avatarUrl ?: "")
+                    Toast.makeText(this, "Added to Favorite! It's so cute :)", Toast.LENGTH_SHORT).show()
+                }
+                isFavorite = !isFavorite
+                updateFavoriteButton(isFavorite)
+            }
+        }
+    }
+
+    private fun tabSetup(login: String) {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, login)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
@@ -108,6 +159,4 @@ class DetailActivity : AppCompatActivity() {
         }.attach()
         supportActionBar?.elevation = 0f
     }
-
-
 }

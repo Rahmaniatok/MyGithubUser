@@ -116,6 +116,21 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/ib_favorite_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/not_favorite"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text=""
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_cat_detail" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

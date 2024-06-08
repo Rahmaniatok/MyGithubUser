@@ -7,17 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <com.google.android.material.search.SearchBar
         android:id="@+id/searchBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginRight="100dp"
         android:layout_marginTop="16dp"
         android:hint="@string/searchbar_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </com.google.android.material.search.SearchBar>
+
     <com.google.android.material.search.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
@@ -28,7 +30,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
     </com.google.android.material.search.SearchView>
+
+    <ImageButton
+        android:id="@+id/ibFavUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/favorite"
+        app:layout_constraintBottom_toBottomOf="@+id/searchBar"
+
+        app:layout_constraintStart_toEndOf="@+id/searchBar"
+        app:layout_constraintTop_toTopOf="@+id/searchView" />
+
+    <ImageButton
+        android:id="@+id/ibDarkMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/dark_mode"
+        app:layout_constraintBottom_toBottomOf="@+id/ibFavUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ibFavUser"
+        app:layout_constraintTop_toTopOf="@+id/ibFavUser" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listAccount"

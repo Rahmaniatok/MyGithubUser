@@ -1,5 +1,6 @@
 package com.example.mygithubuser
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,8 +8,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mygithubuser.databinding.ActivityMainBinding
@@ -40,6 +43,27 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.INVISIBLE
         setupSearch()
         setupRecyclerView()
+        binding.ibFavUser.setOnClickListener {
+            val intent = Intent(this, FavoriteUserActivity::class.java)
+            startActivity(intent)
+        }
+        binding.ibDarkMode.setOnClickListener({
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        })
+        // This code is to activate dark theme according to settings on app launch.
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val settingViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
+            SettingViewModel::class.java
+        )
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
     }
     private fun setupSearch() {
         with(binding) {
@@ -70,7 +94,10 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
         val client = AsyncHttpClient()
 
+<<<<<<< HEAD
+=======
         client.addHeader("Authorization", "token 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")
+>>>>>>> parent of 1ab16a7 (FavUser Update)
         client.addHeader("User-Agent", "request")
 
         val url = "https://api.github.com/search/users?q=$query"
