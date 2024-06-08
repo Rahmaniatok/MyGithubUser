@@ -15,15 +15,12 @@
         android:theme="@style/Theme.MyGithubUser"
         tools:targetApi="31">
         <activity
-<<<<<<< HEAD
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
             android:name=".FavoriteUserActivity"
             android:exported="false" />
         <activity
-=======
->>>>>>> parent of 1ab16a7 (FavUser Update)
             android:name=".DetailActivity"
             android:exported="false" />
         <activity

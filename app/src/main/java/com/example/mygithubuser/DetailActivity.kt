@@ -68,10 +68,6 @@ class DetailActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
         val client = AsyncHttpClient()
 
-<<<<<<< HEAD
-=======
-        client.addHeader("Authorization", "token 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")
->>>>>>> parent of 1ab16a7 (FavUser Update)
         client.addHeader("User-Agent", "request")
 
         val url = "https://api.github.com/users/$keyLogin"
